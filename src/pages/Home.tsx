@@ -56,7 +56,7 @@ export function Home() {
                     alt="ilustração simbolizando pergunta e resposta"
                 />
                 <strong>Crie salas de Q&A ao-vivo</strong>
-                <p>Tire as duvidas da sua audiencia em tempo-real</p>
+                <p>Tire as duvidas da sua audiencia em tempo-real :)</p>
             </aside>
             <main>
                 <div className="main-content">
