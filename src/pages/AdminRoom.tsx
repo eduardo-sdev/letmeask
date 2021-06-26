@@ -1,38 +1,38 @@
-import { useHistory, useParams } from "react-router-dom";
+import { useHistory, useParams } from 'react-router-dom'
 
-import logoImg from "../assets/images/logo.svg";
-import deleteImg from "../assets/images/delete.svg";
-import checkImg from "../assets/images/check.svg";
-import answerImg from "../assets/images/answer.svg";
+import logoImg from '../assets/images/logo.svg'
+import deleteImg from '../assets/images/delete.svg'
+import checkImg from '../assets/images/check.svg'
+import answerImg from '../assets/images/answer.svg'
 
-import { Button } from "../components/Button";
-import { Question } from "../components/Question";
-import { RoomCode } from "../components/RoomCode";
+import { Button } from '../components/Button'
+import { Question } from '../components/Question'
+import { RoomCode } from '../components/RoomCode'
 
-import { useRoom } from "../hooks/useRoom";
+import { useRoom } from '../hooks/useRoom'
 
-import "../styles/room.scss";
-import { database } from "../services/firebase";
-import { useAuth } from "../hooks/useAuth";
+import '../styles/room.scss'
+import { database } from '../services/firebase'
+import { useAuth } from '../hooks/useAuth'
 
 type RoomParams = {
-    id: string;
-};
+    id: string
+}
 
 export function AdminRoom() {
-    const { user } = useAuth();
-    const history = useHistory();
-    const params = useParams<RoomParams>();
-    const roomId = params.id;
+    const { user } = useAuth()
+    const history = useHistory()
+    const params = useParams<RoomParams>()
+    const roomId = params.id
 
-    const { title, questions } = useRoom(roomId);
+    const { title, questions } = useRoom(roomId)
 
     async function handleEndRoom() {
         await database.ref(`rooms/${roomId}`).update({
             endedAt: new Date(),
-        });
+        })
 
-        history.push("/");
+        history.push('/')
     }
 
     async function handleLikeQuestion(
@@ -42,34 +42,34 @@ export function AdminRoom() {
         if (likeId) {
             await database
                 .ref(`rooms/${roomId}/questions/${questionId}/likes/${likeId}`)
-                .remove();
+                .remove()
         } else {
             await database
                 .ref(`rooms/${roomId}/questions/${questionId}/likes`)
                 .push({
                     authorId: user?.id,
-                });
+                })
         }
     }
 
     async function handleSendQuestion(questionId: string) {
-        if (window.confirm("Deseja excluir esta pergunta?")) {
+        if (window.confirm('Deseja excluir esta pergunta?')) {
             await database
                 .ref(`rooms/${roomId}/questions/${questionId}`)
-                .remove();
+                .remove()
         }
     }
 
     async function handleCheckQuestionAsAnswered(questionId: string) {
         await database.ref(`rooms/${roomId}/questions/${questionId}`).update({
             isAnswered: true,
-        });
+        })
     }
 
     async function handleHighlightQuestion(questionId: string) {
         await database.ref(`rooms/${roomId}/questions/${questionId}`).update({
             isHighlighted: true,
-        });
+        })
     }
 
     return (
@@ -94,7 +94,7 @@ export function AdminRoom() {
                     )}
                 </div>
 
-                {questions.map((question) => {
+                {questions.map(question => {
                     return (
                         <div className="question-list">
                             <Question
@@ -108,7 +108,7 @@ export function AdminRoom() {
                                     <>
                                         <button
                                             className={`like-button ${
-                                                question.likeId ? "liked" : ""
+                                                question.likeId ? 'liked' : ''
                                             }`}
                                             type="button"
                                             aria-label="Marcar como gostei"
@@ -181,9 +181,9 @@ export function AdminRoom() {
                                 </button>
                             </Question>
                         </div>
-                    );
+                    )
                 })}
             </main>
         </div>
-    );
+    )
 }

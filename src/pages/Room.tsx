@@ -1,38 +1,38 @@
-import { FormEvent, useState } from "react";
-import { useParams } from "react-router-dom";
+import { FormEvent, useState } from 'react'
+import { useParams } from 'react-router-dom'
 
-import logoImg from "../assets/images/logo.svg";
+import logoImg from '../assets/images/logo.svg'
 
-import { Button } from "../components/Button";
-import { Question } from "../components/Question";
-import { RoomCode } from "../components/RoomCode";
-import { useAuth } from "../hooks/useAuth";
-import { useRoom } from "../hooks/useRoom";
-import { database } from "../services/firebase";
+import { Button } from '../components/Button'
+import { Question } from '../components/Question'
+import { RoomCode } from '../components/RoomCode'
+import { useAuth } from '../hooks/useAuth'
+import { useRoom } from '../hooks/useRoom'
+import { database } from '../services/firebase'
 
-import "../styles/room.scss";
+import '../styles/room.scss'
 
 type RoomParams = {
-    id: string;
-};
+    id: string
+}
 
 export function Room() {
-    const { user } = useAuth();
-    const params = useParams<RoomParams>();
-    const [newQuestion, setNewQuestion] = useState("");
-    const roomId = params.id;
+    const { user } = useAuth()
+    const params = useParams<RoomParams>()
+    const [newQuestion, setNewQuestion] = useState('')
+    const roomId = params.id
 
-    const { title, questions } = useRoom(roomId);
+    const { title, questions } = useRoom(roomId)
 
     async function handleSendQuestion(event: FormEvent) {
-        event.preventDefault();
+        event.preventDefault()
 
-        if (newQuestion.trim() === "") {
-            return;
+        if (newQuestion.trim() === '') {
+            return
         }
 
         if (!user) {
-            throw new Error("You must be logged in");
+            throw new Error('You must be logged in')
         }
 
         const question = {
@@ -43,11 +43,11 @@ export function Room() {
             },
             isHighlighted: false,
             isAnswered: false,
-        };
+        }
 
-        await database.ref(`rooms/${roomId}/questions`).push(question);
+        await database.ref(`rooms/${roomId}/questions`).push(question)
 
-        setNewQuestion("");
+        setNewQuestion('')
     }
 
     async function handleLikeQuestion(
@@ -57,13 +57,13 @@ export function Room() {
         if (likeId) {
             await database
                 .ref(`rooms/${roomId}/questions/${questionId}/likes/${likeId}`)
-                .remove();
+                .remove()
         } else {
             await database
                 .ref(`rooms/${roomId}/questions/${questionId}/likes`)
                 .push({
                     authorId: user?.id,
-                });
+                })
         }
     }
 
@@ -87,7 +87,7 @@ export function Room() {
                 <form onSubmit={handleSendQuestion}>
                     <textarea
                         placeholder="O que você quer perguntar?"
-                        onChange={(event) => setNewQuestion(event.target.value)}
+                        onChange={event => setNewQuestion(event.target.value)}
                         value={newQuestion}
                     />
 
@@ -99,7 +99,7 @@ export function Room() {
                             </div>
                         ) : (
                             <span>
-                                Para enviar uma pergunta,{" "}
+                                Para enviar uma pergunta,{' '}
                                 <button>faça seu login</button>.
                             </span>
                         )}
@@ -110,7 +110,7 @@ export function Room() {
                 </form>
 
                 <div className="question-list">
-                    {questions.map((question) => {
+                    {questions.map(question => {
                         return (
                             <Question
                                 key={question.id}
@@ -122,7 +122,7 @@ export function Room() {
                                 {!question.isAnswered && (
                                     <button
                                         className={`like-button ${
-                                            question.likeId ? "liked" : ""
+                                            question.likeId ? 'liked' : ''
                                         }`}
                                         type="button"
                                         aria-label="Marcar como gostei"
@@ -154,10 +154,10 @@ export function Room() {
                                     </button>
                                 )}
                             </Question>
-                        );
+                        )
                     })}
                 </div>
             </main>
         </div>
-    );
+    )
 }

@@ -1,18 +1,18 @@
-import { ReactNode } from "react";
-import className from "classnames";
+import { ReactNode } from 'react'
+import className from 'classnames'
 
-import "./style.scss";
+import './style.scss'
 
 type QuestionProps = {
-    content: string;
+    content: string
     author: {
-        name: string;
-        avatar: string;
-    };
-    children?: ReactNode;
-    isAnswered?: boolean;
-    isHighlighted?: boolean;
-};
+        name: string
+        avatar: string
+    }
+    children?: ReactNode
+    isAnswered?: boolean
+    isHighlighted?: boolean
+}
 
 export function Question({
     content,
@@ -24,7 +24,7 @@ export function Question({
     return (
         <div
             className={className(
-                "question",
+                'question',
                 { answered: isAnswered },
                 { highlighted: isHighlighted && !isAnswered }
             )}
@@ -38,5 +38,5 @@ export function Question({
                 <div>{children}</div>
             </footer>
         </div>
-    );
+    )
 }
