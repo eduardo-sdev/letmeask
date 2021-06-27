@@ -2,6 +2,7 @@ import styled from 'styled-components'
 
 export const Container = styled.div`
     #page-room {
+
         &.dark{
             background-color: #222;
             color: #fefefe;

@@ -1,15 +1,14 @@
-import { useHistory, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 
-import logoImg from '../../assets/images/logo.svg'
 import deleteImg from '../../assets/images/delete.svg'
 import checkImg from '../../assets/images/check.svg'
 import answerImg from '../../assets/images/answer.svg'
 
-import { Button } from '../../components/Button'
+import { Header } from '../../components/Header'
 import { Question } from '../../components/Question'
-import { RoomCode } from '../../components/RoomCode'
 
 import { useRoom } from '../../hooks/useRoom'
+import { useTheme } from '../../hooks/useTheme'
 
 import { Container } from './sytles'
 
@@ -21,20 +20,12 @@ type RoomParams = {
 }
 
 export function AdminRoom() {
+    const { theme, toggleTheme } = useTheme()
     const { user } = useAuth()
-    const history = useHistory()
     const params = useParams<RoomParams>()
     const roomId = params.id
 
     const { title, questions } = useRoom(roomId)
-
-    async function handleEndRoom() {
-        await database.ref(`rooms/${roomId}`).update({
-            endedAt: new Date(),
-        })
-
-        history.push('/')
-    }
 
     async function handleLikeQuestion(
         questionId: string,
@@ -75,18 +66,8 @@ export function AdminRoom() {
 
     return (
         <Container>
-            <div id="page-room">
-                <header>
-                    <div className="content">
-                        <img src={logoImg} alt="letmeask" />
-                        <div>
-                            <RoomCode code={roomId} />
-                            <Button onClick={handleEndRoom} isOutlined>
-                                Encerrar sala
-                            </Button>
-                        </div>
-                    </div>
-                </header>
+            <div id="page-room" className={theme}>
+                <Header codeId={roomId} toggleTheme={toggleTheme} />
 
                 <main>
                     <div className="room-title">
